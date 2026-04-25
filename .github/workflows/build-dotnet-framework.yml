@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - 'v*'
   pull_request:
 
 jobs:
@@ -28,3 +30,18 @@ jobs:
 
       - name: Build solution
         run: msbuild .\WindowsFormsApp1.sln /p:Configuration=Release /p:SignManifests=false /p:GenerateClickOnceManifests=false
+
+      - name: Package build output
+        run: Compress-Archive -Path WindowsFormsApp1\bin\Release\* -DestinationPath labelmaker2.zip
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: labelmaker2
+          path: labelmaker2.zip
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: labelmaker2.zip
