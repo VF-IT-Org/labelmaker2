@@ -27,4 +27,4 @@ jobs:
         run: nuget restore .\WindowsFormsApp1.sln
 
       - name: Build solution
-        run: msbuild .\WindowsFormsApp1.sln /p:Configuration=Release
+        run: msbuild .\WindowsFormsApp1.sln /p:Configuration=Release /p:SignManifests=false /p:GenerateClickOnceManifests=false
